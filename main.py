@@ -19,6 +19,12 @@ def main() -> None:
     path = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(path, "w", encoding="utf-8", newline="") as f:
         f.write(EMOJI)
+    # Read it back: the gate allows 1-8 characters and rejects whitespace-only
+    # text, so fail loudly here rather than shipping a bad file.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if len(written) != 1 or written != EMOJI:
+        raise ValueError(f"entry.txt must hold exactly one emoji, got {written!r}")
 
 
 if __name__ == "__main__":
